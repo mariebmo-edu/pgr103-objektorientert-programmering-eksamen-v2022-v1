@@ -1,6 +1,5 @@
 package Repo;
 
-import Model.Questionnaire;
 import Model.User;
 
 import java.io.IOException;
@@ -22,11 +21,11 @@ public class UserRepo extends AbstractRepo<User>{
     public boolean insertUser(User user){
 
         String query = "INSERT INTO user(userName, password, highScore) VALUES ('" + user.getUserName() + "','" + user.getPassword() + "','" + user.getHighScore() + "')";
-        return InsertToDatabase(query);
+        return Insert(query);
     }
 
     public ArrayList<User> getAllQuestionnaires(){
-        return RetrieveAllFromDatabase();
+        return RetrieveAll();
     }
 
     public boolean deleteQuestionnaire(User user){

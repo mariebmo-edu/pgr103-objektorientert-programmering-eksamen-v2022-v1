@@ -1,11 +1,14 @@
 package Model;
 
+import java.util.ArrayList;
+
 public class Question {
 
     private int id;
     private int questionnaireId;
     private String question;
     private QuestionType type;
+    private ArrayList<Answer> answers;
 
     public Question(int id, int questionnaireId, String question, QuestionType type) {
         this.id = id;
@@ -44,5 +47,23 @@ public class Question {
 
     public void setType(QuestionType type) {
         this.type = type;
+    }
+
+    public ArrayList<Answer> getAnswers() {
+        return answers;
+    }
+
+    public void setAnswers(ArrayList<Answer> answers) {
+        this.answers = answers;
+    }
+
+    @Override
+    public String toString() {
+        return "Question{" +
+                "id=" + id +
+                ", questionnaireId=" + questionnaireId +
+                ", question='" + question + '\'' +
+                ", type=" + type +
+                '}';
     }
 }

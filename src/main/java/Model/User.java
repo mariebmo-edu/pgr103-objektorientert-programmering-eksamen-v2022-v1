@@ -45,4 +45,14 @@ public class User {
     public void setHighScore(int highScore) {
         this.highScore = highScore;
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", userName='" + userName + '\'' +
+                ", password='" + password + '\'' +
+                ", highScore=" + highScore +
+                '}';
+    }
 }

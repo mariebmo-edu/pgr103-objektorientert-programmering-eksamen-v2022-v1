@@ -22,11 +22,11 @@ public class QuestionRepo extends AbstractRepo<Question> {
     public boolean insertQuestion(Question question){
 
         String query = "INSERT INTO question(questionnaireId, question, type) VALUES ('" + question.getQuestionnaireId() +"', '" + question.getQuestion() + "','" + question.getType() + "')";
-        return InsertToDatabase(query);
+        return Insert(query);
     }
 
     public ArrayList<Question> getAllQuestions(){
-        return RetrieveAllFromDatabase();
+        return RetrieveAll();
     }
 
     public boolean deleteQuestion(Question question){
@@ -34,8 +34,24 @@ public class QuestionRepo extends AbstractRepo<Question> {
         return DeleteFromDatabase(query);
     }
 
+    public Question getQuestionById(int id){
+
+        String query = "SELECT * FROM question WHERE id='" + id + "'";
+        return RetrieveById(query);
+    }
+
+    public ArrayList<Question> getQuestionByQuestionnaireId(int id){
+        String query = "SELECT * FROM question WHERE questionnaireId='" + id + "'";
+        return RetrieveAllWithId(query);
+    }
+
     @Override
     public Question resultMapper(ResultSet resultSet) throws SQLException {
-        return new Question(resultSet.getInt("id"), resultSet.getInt("questionnaireId"), resultSet.getString("question"), QuestionType.valueOf(resultSet.getString("type")));
+
+        int id = resultSet.getInt("id");
+        int questionnaireId = resultSet.getInt("questionnaireId");
+        String question = resultSet.getString("question");
+        QuestionType questionType = QuestionType.valueOf(resultSet.getString("type"));
+        return new Question(id, questionnaireId, question, questionType);
     }
 }

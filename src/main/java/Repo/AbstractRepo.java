@@ -16,11 +16,11 @@ public abstract class AbstractRepo<T> {
 
     public AbstractRepo(String repo) throws IOException {
         Properties properties = new Properties();
-        FileReader fileReader = new FileReader("resources/environment.properties");
+        FileReader fileReader = new FileReader("C:\\Dev\\pgr103-objektorientert-programmering-eksamen-v2022\\src\\main\\resources\\environment.properties");
         properties.load(fileReader);
 
         MysqlDataSource mysqlDataSource = new MysqlDataSource();
-        mysqlDataSource.setURL(properties.getProperty("REPO_URL") + repo);
+        mysqlDataSource.setURL(properties.getProperty("REPO_URL"));
         mysqlDataSource.setUser(properties.getProperty("REPO_USER"));
         mysqlDataSource.setPassword(properties.getProperty("REPO_PASSWORD"));
 
@@ -29,7 +29,7 @@ public abstract class AbstractRepo<T> {
     }
 
 
-    public boolean InsertToDatabase(String query){
+    public boolean Insert(String query){
 
         try(Connection con = dataSource.getConnection()){
             Statement s = con.createStatement();
@@ -42,7 +42,7 @@ public abstract class AbstractRepo<T> {
         return true;
     }
 
-    public ArrayList<T> RetrieveAllFromDatabase(){
+    public ArrayList<T> RetrieveAll(){
 
         ArrayList<T> arrayList = new ArrayList<>();
 
@@ -50,6 +50,43 @@ public abstract class AbstractRepo<T> {
             Statement s = con.createStatement();
 
             String query = "SELECT * FROM " + repo;
+
+            ResultSet resultSet = s.executeQuery(query);
+
+            while(resultSet.next()){
+                T result = resultMapper(resultSet);
+                arrayList.add(result);
+            }
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return arrayList;
+    }
+
+    public T RetrieveById(String query){
+
+        try(Connection con = dataSource.getConnection()){
+            Statement s = con.createStatement();
+
+            ResultSet resultSet = s.executeQuery(query);
+
+            if(resultSet.next()){
+                return resultMapper(resultSet);
+            }
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return null;
+    }
+
+    public ArrayList<T> RetrieveAllWithId(String query){
+
+        ArrayList<T> arrayList = new ArrayList<>();
+
+        try(Connection con = dataSource.getConnection()){
+            Statement s = con.createStatement();
 
             ResultSet resultSet = s.executeQuery(query);
 

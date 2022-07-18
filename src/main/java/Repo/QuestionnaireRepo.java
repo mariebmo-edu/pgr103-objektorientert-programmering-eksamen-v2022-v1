@@ -1,7 +1,6 @@
 package Repo;
 
 import Model.Question;
-import Model.QuestionType;
 import Model.Questionnaire;
 
 import java.io.IOException;
@@ -23,16 +22,22 @@ public class QuestionnaireRepo extends AbstractRepo<Questionnaire>{
     public boolean insertQuestionnaire(Questionnaire questionnaire){
 
         String query = "INSERT INTO questionnaire(questionnaireName) VALUES ('" + questionnaire.getQuestionnaireName() + "')";
-        return InsertToDatabase(query);
+        return Insert(query);
     }
 
     public ArrayList<Questionnaire> getAllQuestionnaires(){
-        return RetrieveAllFromDatabase();
+        return RetrieveAll();
     }
 
     public boolean deleteQuestionnaire(Questionnaire questionnaire){
         String query = "DELETE FROM question WHERE id='" + questionnaire.getId() + "'";
         return DeleteFromDatabase(query);
+    }
+
+    public Questionnaire getQuestionnaireById(int id){
+
+        String query = "SELECT * FROM questionnaire WHERE id='" + id + "'";
+        return RetrieveById(query);
     }
 
     @Override
