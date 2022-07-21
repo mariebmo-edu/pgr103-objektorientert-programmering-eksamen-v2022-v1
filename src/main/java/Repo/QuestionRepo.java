@@ -12,35 +12,35 @@ public class QuestionRepo extends AbstractRepo<Question> {
 
     public QuestionRepo() throws IOException {
         super("question");
-        try{
+        try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-        } catch (ClassNotFoundException e){
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
 
-    public boolean insertQuestion(Question question){
+    public boolean insertQuestion(Question question) {
 
-        String query = "INSERT INTO question(questionnaireId, question, type) VALUES ('" + question.getQuestionnaireId() +"', '" + question.getQuestion() + "','" + question.getType() + "')";
+        String query = "INSERT INTO question(questionnaireId, question, type) VALUES ('" + question.getQuestionnaireId() + "', '" + question.getQuestion() + "','" + question.getType() + "')";
         return Insert(query);
     }
 
-    public ArrayList<Question> getAllQuestions(){
+    public ArrayList<Question> getAllQuestions() {
         return RetrieveAll();
     }
 
-    public boolean deleteQuestion(Question question){
+    public boolean deleteQuestion(Question question) {
         String query = "DELETE FROM question WHERE id='" + question.getId() + "'";
-        return DeleteFromDatabase(query);
+        return Delete(query);
     }
 
-    public Question getQuestionById(int id){
+    public Question getQuestionById(int id) {
 
         String query = "SELECT * FROM question WHERE id='" + id + "'";
         return RetrieveById(query);
     }
 
-    public ArrayList<Question> getQuestionByQuestionnaireId(int id){
+    public ArrayList<Question> getQuestionByQuestionnaireId(int id) {
         String query = "SELECT * FROM question WHERE questionnaireId='" + id + "'";
         return RetrieveAllWithId(query);
     }

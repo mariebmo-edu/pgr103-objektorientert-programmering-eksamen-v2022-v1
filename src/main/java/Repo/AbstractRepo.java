@@ -5,7 +5,10 @@ import com.mysql.cj.jdbc.MysqlDataSource;
 import javax.sql.DataSource;
 import java.io.FileReader;
 import java.io.IOException;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Properties;
 
@@ -29,9 +32,9 @@ public abstract class AbstractRepo<T> {
     }
 
 
-    public boolean Insert(String query){
+    public boolean Insert(String query) {
 
-        try(Connection con = dataSource.getConnection()){
+        try (Connection con = dataSource.getConnection()) {
             Statement s = con.createStatement();
             s.executeUpdate(query);
 
@@ -42,18 +45,48 @@ public abstract class AbstractRepo<T> {
         return true;
     }
 
-    public ArrayList<T> RetrieveAll(){
+    public boolean Exists(String query) {
+
+        try (Connection con = dataSource.getConnection()) {
+            Statement s = con.createStatement();
+            ResultSet resultSet = s.executeQuery(query);
+
+            if (!resultSet.next()) {
+                return false;
+            }
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+    public boolean Update(String query) {
+
+        try (Connection con = dataSource.getConnection()) {
+            Statement s = con.createStatement();
+            s.executeUpdate(query);
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+    public ArrayList<T> RetrieveAll() {
 
         ArrayList<T> arrayList = new ArrayList<>();
 
-        try(Connection con = dataSource.getConnection()){
+        try (Connection con = dataSource.getConnection()) {
             Statement s = con.createStatement();
 
             String query = "SELECT * FROM " + repo;
 
             ResultSet resultSet = s.executeQuery(query);
 
-            while(resultSet.next()){
+            while (resultSet.next()) {
                 T result = resultMapper(resultSet);
                 arrayList.add(result);
             }
@@ -64,14 +97,14 @@ public abstract class AbstractRepo<T> {
         return arrayList;
     }
 
-    public T RetrieveById(String query){
+    public T RetrieveById(String query) {
 
-        try(Connection con = dataSource.getConnection()){
+        try (Connection con = dataSource.getConnection()) {
             Statement s = con.createStatement();
 
             ResultSet resultSet = s.executeQuery(query);
 
-            if(resultSet.next()){
+            if (resultSet.next()) {
                 return resultMapper(resultSet);
             }
 
@@ -81,16 +114,33 @@ public abstract class AbstractRepo<T> {
         return null;
     }
 
-    public ArrayList<T> RetrieveAllWithId(String query){
+    public T RetrieveByConditions(String query) {
 
-        ArrayList<T> arrayList = new ArrayList<>();
-
-        try(Connection con = dataSource.getConnection()){
+        try (Connection con = dataSource.getConnection()) {
             Statement s = con.createStatement();
 
             ResultSet resultSet = s.executeQuery(query);
 
-            while(resultSet.next()){
+            if (resultSet.next()) {
+                return resultMapper(resultSet);
+            }
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return null;
+    }
+
+    public ArrayList<T> RetrieveAllWithId(String query) {
+
+        ArrayList<T> arrayList = new ArrayList<>();
+
+        try (Connection con = dataSource.getConnection()) {
+            Statement s = con.createStatement();
+
+            ResultSet resultSet = s.executeQuery(query);
+
+            while (resultSet.next()) {
                 T result = resultMapper(resultSet);
                 arrayList.add(result);
             }
@@ -101,9 +151,9 @@ public abstract class AbstractRepo<T> {
         return arrayList;
     }
 
-    public boolean DeleteFromDatabase(String query){
+    public boolean Delete(String query) {
 
-        try(Connection con = dataSource.getConnection()){
+        try (Connection con = dataSource.getConnection()) {
             Statement s = con.createStatement();
             s.executeQuery(query);
 
