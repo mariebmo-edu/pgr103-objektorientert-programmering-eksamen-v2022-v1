@@ -1,3 +1,4 @@
+import Logic.GameLogic;
 import Model.Question;
 import Model.Questionnaire;
 import Repo.AnswerRepo;
@@ -12,8 +13,8 @@ import java.util.ArrayList;
 public class Program {
 
     public static void main(String[] args) throws IOException {
-        Menu.printMenu();
+        GameLogic gameLogic = new GameLogic();
 
-        Menu.PrintQuestionnaire();
+        gameLogic.Play();
     }
 }
