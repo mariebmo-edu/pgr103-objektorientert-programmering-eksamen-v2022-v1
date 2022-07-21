@@ -19,7 +19,7 @@ public abstract class AbstractRepo<T> {
 
     public AbstractRepo(String repo) throws IOException {
         Properties properties = new Properties();
-        FileReader fileReader = new FileReader("C:\\Dev\\pgr103-objektorientert-programmering-eksamen-v2022\\src\\main\\resources\\environment.properties");
+        FileReader fileReader = new FileReader("src/main/resources/environment.properties");
         properties.load(fileReader);
 
         MysqlDataSource mysqlDataSource = new MysqlDataSource();
